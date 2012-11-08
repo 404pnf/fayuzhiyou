@@ -8,6 +8,7 @@ class SinatraStaticServer < Sinatra::Base
 
   get(/.+/) do
     send_sinatra_file(request.path) {404}
+    send_sinatra_file(unescape request.path) {404}
   end
 
   not_found do
