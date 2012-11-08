@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 require 'yaml'
 
-# usage: script.rb inputrss outputfolder
+# usage: script.rb inputrss outputfolder $debug=false
 
 f = ARGV[0]
 out = File.expand_path ARGV[1]
+$debug = ARGV[2]
 
-#p f
-#p out
+p $debug if $debug
+p "输入文件是#{f}" if $debug
+p "输出目录是#{out}" if $debug
 
 
 def sanitize(title)
@@ -72,11 +74,10 @@ arr.each_slice(2) do |article|
     .map {|s| s.gsub(/\s\s+/, ' ')}
     .map {|s| s.gsub(/^\s+/, '')}
     .join("\n\n")
-  #  p date
-  #  p title
-  #  p tags.join(',')
-  #  p tags
-  #  p content
+  p date if $debug
+  p title if $debug
+  p tags if $debug
+  p content if $debug
   safe_title = sanitize(title)
   pretty_title = safe_title.gsub(/_/, ' ')
   yaml_front = <<eof
@@ -89,7 +90,7 @@ categories: [#{tags}]
 
 eof
 
-  #p safe_title
+  p safe_title if $debug
   Dir.mkdir out unless File.exist? out # return true if out is a directory 
 
   File.open("#{out}/#{date}-#{safe_title}.md", 'w') do |file|
@@ -97,7 +98,6 @@ eof
     file.puts content
   end
 
-  
 end
 
 
